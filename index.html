@@ -71,9 +71,9 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-java-basic" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+    <article id="post-basic" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
-    <a href="/2021/07/10/java-basic/" class="article-date">
+    <a href="/2021/07/10/basic/" class="article-date">
   <time class="dt-published" datetime="2021-07-10T07:04:49.797Z" itemprop="datePublished">2021-07-10</time>
 </a>
     
@@ -83,9 +83,21 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <h4 id="为啥说字符串是不可变的"><a href="#为啥说字符串是不可变的" class="headerlink" title="为啥说字符串是不可变的"></a>为啥说字符串是不可变的</h4><ul>
-<li>首先final修饰类，代表这个类不能被继承，也就没有任何办法去继承</li>
-<li>final修饰变量：不能指向新的对象，可以改变对象中变量的值</li>
+        <h3 id="128陷阱"><a href="#128陷阱" class="headerlink" title="128陷阱"></a>128陷阱</h3><p>简单一点讲装箱就是基本数据类型自动转换为包装类，拆箱与之对应，包装类自动转换为基本数据类型.</p>
+<pre><code>//自动装箱
+    Integer s = 123;
+    //上面语句其实相当于这条语句
+    Integer ss = Integer.valueOf(123);
+</code></pre>
+<ul>
+<li><p>装箱就是自动将基本数据类型转换为包装器类型；</p>
+</li>
+<li><p>拆箱就是自动将包装器类型转换为基本数据类型。</p>
+</li>
+<li><p>首先final修饰类，代表这个类不能被继承，也就没有任何办法去继承</p>
+</li>
+<li><p>final修饰变量：不能指向新的对象，可以改变对象中变量的值</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">     <span class="keyword">int</span> a1 = <span class="number">30</span>;</span><br><span class="line">     <span class="keyword">int</span> a2 = <span class="number">30</span>;</span><br><span class="line">        <span class="comment">// 值比较：true</span></span><br><span class="line">        System.out.println(a1 == a2);</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">int</span> b1 = <span class="number">130</span>;</span><br><span class="line">        <span class="keyword">int</span> b2 = <span class="number">130</span>;</span><br><span class="line">        <span class="comment">// 值比较：true</span></span><br><span class="line">        System.out.println(b1 == b2);</span><br><span class="line"> </span><br><span class="line">        Integer c1 = <span class="number">30</span>;</span><br><span class="line">        Integer c2 = <span class="number">30</span>;</span><br><span class="line">        <span class="comment">// 类比较，但在-127～128之间，属于常量：true</span></span><br><span class="line">        System.out.println(c1 == c2);</span><br><span class="line"> </span><br><span class="line">        Integer d1 = <span class="number">130</span>;</span><br><span class="line">        Integer d2 = <span class="number">130</span>;</span><br><span class="line">        <span class="comment">// 类比较，不在-127～128之间，属于新建对象：false</span></span><br><span class="line">        System.out.println(d1 == d2);</span><br><span class="line"> </span><br><span class="line">        Integer e1 = <span class="number">130</span>;</span><br><span class="line">        Integer e2 = <span class="number">130</span>;</span><br><span class="line">        <span class="comment">// 类转为数值比较：true</span></span><br><span class="line">        System.out.println(e1.intValue() == e1.intValue());</span><br><span class="line">        </span><br><span class="line">        Integer f1 = <span class="number">130</span>;</span><br><span class="line">        <span class="keyword">int</span> f2 = <span class="number">130</span>;</span><br><span class="line">        <span class="comment">// f1自动拆箱，不涉及128陷阱，与f2比较：true</span></span><br><span class="line">        System.out.println(f1 == f2);</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">long</span> g1 = <span class="number">30</span>;</span><br><span class="line">        <span class="keyword">long</span> g2 = <span class="number">30</span>;</span><br><span class="line">        <span class="comment">// 值比较：true</span></span><br><span class="line">        System.out.println(g1 == g2);</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">long</span> h1 = <span class="number">130</span>;</span><br><span class="line">        <span class="keyword">long</span> h2 = <span class="number">130</span>;</span><br><span class="line">        <span class="comment">// 值比较：true</span></span><br><span class="line">        System.out.println(h1 == h2);</span><br><span class="line"> </span><br><span class="line">        Long i1 = <span class="number">30l</span>;</span><br><span class="line">        Long i2 = <span class="number">30l</span>;</span><br><span class="line">        <span class="comment">// 类比较，但在-127～128之间，属于常量：true</span></span><br><span class="line">        System.out.println(i1 == i2);</span><br><span class="line"> </span><br><span class="line">        Long g1 = <span class="number">130l</span>;</span><br><span class="line">        Long g2 = <span class="number">130l</span>;</span><br><span class="line">        <span class="comment">// 类比较，不在-127～128之间，属于新建对象：false</span></span><br><span class="line">        System.out.println(g1 == g2);    </span><br><span class="line"> </span><br><span class="line">        Long k1 = <span class="number">130l</span>;</span><br><span class="line">        Long k2 = <span class="number">130l</span>;</span><br><span class="line">        <span class="comment">// 类转为数值比较：true</span></span><br><span class="line">        System.out.println(k1.longValue() == k2.longValue());</span><br><span class="line">        </span><br><span class="line">        Integer l1 = <span class="number">130l</span>;</span><br><span class="line">        <span class="keyword">int</span> l2 = <span class="number">130l</span>;</span><br><span class="line">        <span class="comment">// l1自动拆箱，不涉及128陷阱，与l2比较：true</span></span><br><span class="line">        System.out.println(l1 == l2);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 </ul>
 <h4 id="输入与输出"><a href="#输入与输出" class="headerlink" title="输入与输出"></a>输入与输出</h4><h4 id="for-each循环；"><a href="#for-each循环；" class="headerlink" title="for-each循环；"></a>for-each循环；</h4><p>for(int i: a)</p>
 <h3 id="第三章-对象和类（OOP）"><a href="#第三章-对象和类（OOP）" class="headerlink" title="第三章-对象和类（OOP）"></a>第三章-对象和类（OOP）</h3><p>抽象-封装-集成-多态；</p>
@@ -98,7 +110,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/10/java-basic/" data-id="ckqxmeldn0002mgv2e2rw8sc4" data-title="" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/10/basic/" data-id="ckqxvi80s0000t4v23p2p4rwi" data-title="" class="article-share-link">Share</a>
       
       
       
@@ -132,12 +144,72 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>内卷小组</p>
-
+        
       
     </div>
     <footer class="article-footer">
       <a data-url="http://example.com/2021/07/10/test/" data-id="ckqxmeldh0001mgv2fqfsaqgj" data-title="test" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-java_basic" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/07/10/java_basic/" class="article-date">
+  <time class="dt-published" datetime="2021-07-10T05:54:31.000Z" itemprop="datePublished">2021-07-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/07/10/java_basic/">test</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h3 id="128陷阱"><a href="#128陷阱" class="headerlink" title="128陷阱"></a>128陷阱</h3><p>简单一点讲装箱就是基本数据类型自动转换为包装类，拆箱与之对应，包装类自动转换为基本数据类型.</p>
+<pre><code>//自动装箱
+    Integer s = 123;
+    //上面语句其实相当于这条语句
+    Integer ss = Integer.valueOf(123);
+</code></pre>
+<ul>
+<li><p>装箱就是自动将基本数据类型转换为包装器类型；</p>
+</li>
+<li><p>拆箱就是自动将包装器类型转换为基本数据类型。</p>
+</li>
+<li><p>首先final修饰类，代表这个类不能被继承，也就没有任何办法去继承</p>
+</li>
+<li><p>final修饰变量：不能指向新的对象，可以改变对象中变量的值</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">     <span class="keyword">int</span> a1 = <span class="number">30</span>;</span><br><span class="line">     <span class="keyword">int</span> a2 = <span class="number">30</span>;</span><br><span class="line">        <span class="comment">// 值比较：true</span></span><br><span class="line">        System.out.println(a1 == a2);</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">int</span> b1 = <span class="number">130</span>;</span><br><span class="line">        <span class="keyword">int</span> b2 = <span class="number">130</span>;</span><br><span class="line">        <span class="comment">// 值比较：true</span></span><br><span class="line">        System.out.println(b1 == b2);</span><br><span class="line"> </span><br><span class="line">        Integer c1 = <span class="number">30</span>;</span><br><span class="line">        Integer c2 = <span class="number">30</span>;</span><br><span class="line">        <span class="comment">// 类比较，但在-127～128之间，属于常量：true</span></span><br><span class="line">        System.out.println(c1 == c2);</span><br><span class="line"> </span><br><span class="line">        Integer d1 = <span class="number">130</span>;</span><br><span class="line">        Integer d2 = <span class="number">130</span>;</span><br><span class="line">        <span class="comment">// 类比较，不在-127～128之间，属于新建对象：false</span></span><br><span class="line">        System.out.println(d1 == d2);</span><br><span class="line"> </span><br><span class="line">        Integer e1 = <span class="number">130</span>;</span><br><span class="line">        Integer e2 = <span class="number">130</span>;</span><br><span class="line">        <span class="comment">// 类转为数值比较：true</span></span><br><span class="line">        System.out.println(e1.intValue() == e1.intValue());</span><br><span class="line">        </span><br><span class="line">        Integer f1 = <span class="number">130</span>;</span><br><span class="line">        <span class="keyword">int</span> f2 = <span class="number">130</span>;</span><br><span class="line">        <span class="comment">// f1自动拆箱，不涉及128陷阱，与f2比较：true</span></span><br><span class="line">        System.out.println(f1 == f2);</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">long</span> g1 = <span class="number">30</span>;</span><br><span class="line">        <span class="keyword">long</span> g2 = <span class="number">30</span>;</span><br><span class="line">        <span class="comment">// 值比较：true</span></span><br><span class="line">        System.out.println(g1 == g2);</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">long</span> h1 = <span class="number">130</span>;</span><br><span class="line">        <span class="keyword">long</span> h2 = <span class="number">130</span>;</span><br><span class="line">        <span class="comment">// 值比较：true</span></span><br><span class="line">        System.out.println(h1 == h2);</span><br><span class="line"> </span><br><span class="line">        Long i1 = <span class="number">30l</span>;</span><br><span class="line">        Long i2 = <span class="number">30l</span>;</span><br><span class="line">        <span class="comment">// 类比较，但在-127～128之间，属于常量：true</span></span><br><span class="line">        System.out.println(i1 == i2);</span><br><span class="line"> </span><br><span class="line">        Long g1 = <span class="number">130l</span>;</span><br><span class="line">        Long g2 = <span class="number">130l</span>;</span><br><span class="line">        <span class="comment">// 类比较，不在-127～128之间，属于新建对象：false</span></span><br><span class="line">        System.out.println(g1 == g2);    </span><br><span class="line"> </span><br><span class="line">        Long k1 = <span class="number">130l</span>;</span><br><span class="line">        Long k2 = <span class="number">130l</span>;</span><br><span class="line">        <span class="comment">// 类转为数值比较：true</span></span><br><span class="line">        System.out.println(k1.longValue() == k2.longValue());</span><br><span class="line">        </span><br><span class="line">        Integer l1 = <span class="number">130l</span>;</span><br><span class="line">        <span class="keyword">int</span> l2 = <span class="number">130l</span>;</span><br><span class="line">        <span class="comment">// l1自动拆箱，不涉及128陷阱，与l2比较：true</span></span><br><span class="line">        System.out.println(l1 == l2);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="输入与输出"><a href="#输入与输出" class="headerlink" title="输入与输出"></a>输入与输出</h4><h4 id="for-each循环；"><a href="#for-each循环；" class="headerlink" title="for-each循环；"></a>for-each循环；</h4><p>for(int i: a)</p>
+<h3 id="第三章-对象和类（OOP）"><a href="#第三章-对象和类（OOP）" class="headerlink" title="第三章-对象和类（OOP）"></a>第三章-对象和类（OOP）</h3><p>抽象-封装-集成-多态；</p>
+<p>static修饰的都是归类所有的</p>
+<p>很多歌对象共享一个类 ；</p>
+<p>静态方法不能访问普通的私有域</p>
+<p>出栈了 导致作用域辩护的那些都消失了 回归本源了</p>
+<p>构造函数总是在最后执行，初始化语句是从上往下顺序执行的；</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/07/10/java_basic/" data-id="ckqxvi81b0001t4v2b6yeaszv" data-title="test" class="article-share-link">Share</a>
       
       
       
@@ -231,11 +303,15 @@
       <ul>
         
           <li>
-            <a href="/2021/07/10/java-basic/">(no title)</a>
+            <a href="/2021/07/10/basic/">(no title)</a>
           </li>
         
           <li>
             <a href="/2021/07/10/test/">test</a>
+          </li>
+        
+          <li>
+            <a href="/2021/07/10/java_basic/">test</a>
           </li>
         
           <li>
